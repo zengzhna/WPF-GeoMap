@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GeoMap">
+    
+    <Style TargetType="{x:Type local:GeoJsonMap}">
+        <Setter Property="Background" Value="#55DCDCD5"/>
+        <Setter Property="GeoMapTooltip">
+            <Setter.Value>
+                <Border Background="White" CornerRadius="2"
+                        BorderThickness="1" Padding="20 10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontWeight="Bold" Foreground="Black" Text="{Binding Properties.Name}"
+                                   MinWidth="50"></TextBlock>
+                    </Grid>
+                </Border>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

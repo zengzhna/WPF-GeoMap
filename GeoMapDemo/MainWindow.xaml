@@ -1,0 +1,99 @@
+﻿<Window x:Class="GeoMapDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:GeoMap;assembly=GeoMap"
+        xmlns:local="clr-namespace:GeoMapDemo"
+        d:DataContext="{d:DesignInstance Type=local:MainWindow}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:NullValueToVisibilityConverter x:Key="NullValueToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1" Grid.Column="1" Background="Black" ClipToBounds="True">
+            <lvc:GeoJsonMap x:Name="map" Source="{Binding Source}" ShapeHoverable="True"
+                        EnableZoomingAndPanning="True" TooltipValues="{Binding CityInfo}"
+                        GeometryMouseDoubleClickCommand="{Binding GeometryMouseDoubleClickCommand}"
+                        MapDataItemsSource="{Binding MapDataItemsSource}"
+                        ShapeFill="#FF081F39" Background="Transparent" ShapeStroke="#FF00F6FF"
+                        ShapeStrokeThickness=".4"
+                        EnableOutlined="True" OutlinedStroke="#FF00F6FF" OutlinedStrokeThickness="3"
+                        EnableDropShadow="True"
+                        LanguagePack="{Binding LanguagePack}"
+                        GeoMapScale="{Binding GeoMapScale, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <lvc:GeoJsonMap.GeoMapTooltip>
+                    <Border Background="#BBFFFFFF" CornerRadius="2"
+                        BorderThickness="1" Padding="20 10"
+                        d:DataContext="{d:DesignInstance Type=lvc:GeoJsonMapTooltipModel}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock FontWeight="Bold" Foreground="Black" Text="{Binding Properties.Name}"
+                                   MinWidth="50"></TextBlock>
+
+                            <Grid Grid.Row="1" Visibility="{Binding Content, Converter={StaticResource NullValueToVisibilityConverter}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" FontWeight="Bold" Foreground="Black" Text="Level: "
+                                   Margin="10,5"></TextBlock>
+                                <TextBlock Grid.Row="1" Grid.Column="1" FontWeight="Bold" Foreground="Black" Text="{Binding Content.Level}"
+                                   MinWidth="50" Margin="0,5"></TextBlock>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </lvc:GeoJsonMap.GeoMapTooltip>
+            </lvc:GeoJsonMap>
+            <StackPanel HorizontalAlignment="Left">
+                <Button Content="上一级" Command="{Binding PreBtnCommand}" Width="120" HorizontalAlignment="Left"></Button>
+                <Button Content="增加区域" Command="{Binding AddAreaDataBtnCommand}" Width="120" HorizontalAlignment="Left"></Button>
+                <Button Content="移除区域" Command="{Binding RemoveAreaDataBtnCommand}" Width="120" HorizontalAlignment="Left"></Button>
+                <Button Content="Scale" Command="{Binding UpdateScaleBtnCommand}" Width="120" HorizontalAlignment="Left"></Button>
+                <TextBlock Text="position: " HorizontalAlignment="Left">
+                <Run Text="{Binding ElementName=map, Path=MousePosition.X, StringFormat='{}{0:f0},'}"/>
+                <Run Text="{Binding ElementName=map, Path=MousePosition.Y, StringFormat='{}{0:f0}'}"/>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                    Margin="20">
+                <ListBox Background="Transparent" BorderThickness="0"
+                     ItemsSource="{Binding ColorItemsSource}" IsHitTestVisible="False">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,0">
+                                <Rectangle Height="20" Width="35" Fill="{Binding Color}">
+                                    <Rectangle.Clip>
+                                        <RectangleGeometry Rect="0,0,35,20"  RadiusX="3" RadiusY="3"/>
+                                    </Rectangle.Clip>
+                                </Rectangle>
+                                <TextBlock Text="{Binding Remarks}" Margin="10,0,0,0" VerticalAlignment="Center"
+                                           Foreground="White"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Grid>
+    </Grid>
+    
+</Window>
